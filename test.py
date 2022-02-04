@@ -52,12 +52,21 @@ if sel_chart:
 ################################################
 # Sidebar section
 
-sel_data.loc[(sel_key['keyword']==sel_key), 'ticker count'].values[0]
+# Generate Keyword - Count DataFrame
+keyword_list = sel_data.loc[(sel_data['keyword']==sel_key), 'ticker count'].values[0]
+keyword_list = keyword_list[1:-1]
+keyword_list2 = re.findall(r'\(\'\D+\', \d\)', keyword_list)
 
+tmp_list = []
 
+for idx, data in enumerate(keyword_list2):
+    data = re.sub('[(,\),\',\']', '', data)
+    tmp = re.split(' ', data)
+    tmp[1] = int(tmp[1])
+    tmp_list.append(tmp)
 
-
-
+df_keyword = pd.DataFrame(tmp_list, columns=['keyword', 'count'])
+st.dataframe(df_keyword)
 
 
 G = nx.Graph()
