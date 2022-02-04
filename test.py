@@ -50,7 +50,7 @@ if sel_chart:
     sel_save = st.sidebar.radio('Filetype',[None,'PNG','SVG','PDF'])
 
 ################################################
-# Sidebar section
+# Main section
 
 # Generate Keyword - Count DataFrame
 keyword_list = sel_data.loc[(sel_data['keyword']==sel_key), 'ticker count'].values[0]
