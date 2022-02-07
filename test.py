@@ -60,12 +60,12 @@ keyword_list2 = re.findall(r'\(\'\D+\', \d\)', keyword_list)
 tmp_list = []
 
 for idx, data in enumerate(keyword_list2):
-    data = re.sub('[(,\),\',\']', '', data)
+    data = re.sub('[\(,\),\',\']', '', data)
     tmp = re.split(' ', data)
     tmp[1] = int(tmp[1])
     tmp_list.append(tmp)
 
-df_keyword = pd.DataFrame(tmp_list, columns=['keyword', 'count'])
+df_keyword = pd.DataFrame(tmp_list, columns=['ticker', 'count'])
 st.dataframe(df_keyword)
 
 
