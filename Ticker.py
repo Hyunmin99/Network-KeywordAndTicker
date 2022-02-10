@@ -81,7 +81,7 @@ if sel_tic != 'None':
     G.add_weighted_edges_from(edge_list)
     pr = nx.pagerank(G)
     pos = nx.layout.fruchterman_reingold_layout(G)
-    size = {sel_tic: (sel_data.loc[(sel_data['symbol']==sel_tic), 'count'].values[0]/5)}
+    size = {sel_tic: (sel_data.loc[(sel_data['symbol']==sel_tic), 'count'].values[0]/100)}
     keyword_size = df_ticker[['keyword', 'count']].set_index('keyword').to_dict()
     size.update(keyword_size["count"])
     fig = plt.figure(figsize=(20,20))
