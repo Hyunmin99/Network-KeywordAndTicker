@@ -24,16 +24,17 @@ def get_sel_data(data, sel_date, sel_head):
     sel_key_list = sel_data[data.columns[1]].tolist() # for single key graph
     return sel_data, sel_key_list
 
-def single_key_df(sel_data, sel_key):
+def single_key_df(sel_data, sel_key): #### e r r o r ####
     key_type = sel_data.columns[1] #[keyword or symbol]
     col_count = sel_data.columns[2] #[keyword count or ticker count]
     sub_key_type = 'ticker' if key_type == 'keyword' else 'keyword'
     
     sel_data = sel_data.loc[(sel_data[key_type]==sel_key)]
-    
+    st.dataframe(sel_data[col_count])
     cov_list = sel_data[col_count].map(lambda x: literal_eval(x)) #count data [string -> list]
-    
-    cov_df = pd.DataFrame(cov_list.values[0], columns = [sub_key_type, 'count'])
+    #cov_df = pd.DataFrame(cov_list.values, columns = [sub_key_type, 'count'])
+    cov_df = cov_list.reset_index()
+    st.write(cov_df)
     return cov_df
 
 def multi_key_df(sel_data):
