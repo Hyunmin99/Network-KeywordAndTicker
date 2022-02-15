@@ -18,32 +18,33 @@ def get_sel_data(data, sel_date, sel_head):
     col_count = data.columns[2]
     
     sel_data = data.groupby('date').get_group(sel_date)
-    sel_data['count'] = sel_data[col_count].apply(lambda x: sum(map(int, re.findall(r'\d+', x))))
+    sel_data['count'] = sel_data[col_count].apply(lambda x: sum(map(int, map(lambda x: x.replace(', ', ''), re.findall(r'\, \d+', x)))))
     sel_data = sel_data.sort_values(by=['count'], axis=0, ascending=False).head(sel_head).reset_index(drop = True)
     
     sel_key_list = sel_data[data.columns[1]].tolist() # for single key graph
     return sel_data, sel_key_list
 
-def single_key_df(sel_data, sel_key): #### e r r o r ####
+def single_key_df(sel_data, sel_key):
     key_type = sel_data.columns[1] #[keyword or symbol]
     col_count = sel_data.columns[2] #[keyword count or ticker count]
     sub_key_type = 'ticker' if key_type == 'keyword' else 'keyword'
     
     sel_data = sel_data.loc[(sel_data[key_type]==sel_key)]
-    st.dataframe(sel_data[col_count])
     cov_list = sel_data[col_count].map(lambda x: literal_eval(x)) #count data [string -> list]
-    #cov_df = pd.DataFrame(cov_list.values, columns = [sub_key_type, 'count'])
-    cov_df = cov_list.reset_index()
-    st.write(cov_df)
+    
+    cov_df = pd.DataFrame(cov_list.iloc[0], columns = [sub_key_type, 'count'])
+    cov_df[key_type] = cov_df.apply(lambda x: sel_key, axis = 1)
+    cov_df = cov_df[[key_type, sub_key_type, 'count']]
+    
     return cov_df
 
 def multi_key_df(sel_data):
     key_type = sel_data.columns[1] #[keyword or symbol]
     col_count = sel_data.columns[2] #[keyword count or ticker count]
     sub_key_type = 'ticker' if key_type == 'keyword' else 'keyword'
-    
+
     sel_data[col_count] = sel_data[col_count].map(lambda x: literal_eval(x)) #count data [string -> list]
-    
+
     cov_df = pd.DataFrame()
     for idx in range(len(sel_data)):
         tmp = sel_data[col_count][idx]
@@ -52,5 +53,6 @@ def multi_key_df(sel_data):
         df[key_type] = sel_data[key_type][idx]
         df = df[[key_type, sub_key_type, 'count']]
         cov_df = pd.concat([cov_df, df]).reset_index(drop=True)    
+
     return cov_df
 
