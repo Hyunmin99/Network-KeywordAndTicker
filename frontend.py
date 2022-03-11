@@ -6,7 +6,7 @@ import generic
 import graph
 
 def display_sidebar():
-    sel_dtype, sel_date, sel_head, sel_key = None, None, None, None
+    sel_dtype, sel_date, sel_head, sel_key, sel_show, sel_save= None, None, None, None, None, None
     st.sidebar.header('Choose selections below')
     
     # 1) Type of data
@@ -33,16 +33,14 @@ def display_sidebar():
     else: 
         sel_key = None
     
-    return sel_dtype, sel_date, sel_head, sel_key, sel_data
+    # 5) Show graph
+    st.markdown('Show network graph')
+    sel_show = st.sidebar.checkbox('Show network graph?')
+    if sel_show:
+        sel_save = st.sidebar.button('Save as png')
+        
+    
+    return sel_dtype, sel_date, sel_head, sel_key, sel_show, sel_save, sel_data
 
 def show_chart(fig):
-    
     st.pyplot(fig)
-
-'''
-    # 5) Show graph to image
-    if sel_chart:
-        st.sidebar.markdown('Which file extenstion to save the file into?')
-        # sel_save = st.sidebar.button('Save')
-        sel_save = st.sidebar.radio('Filetype',[None,'PNG','PDF'])
-'''
